@@ -38,7 +38,16 @@ class S3FileSystem(BaseFileSystem):
         self.endpoint_url = config.get("endpointurl")
 
         self.use_ssl = config.get("use_ssl", True)
-        self.ssl_verify = config.get("ssl_verify", True)
+        
+        ssl_verify = config.get("ssl_verify")
+        if ssl_verify.lower() in ['false', '0', 'no']:
+            ssl_verify = False
+        elif ssl_verify.lower() in ['true', '1', 'yes']:
+            ssl_verify = None
+        else:
+            pass  # it could be a path to a file, which would be fine(?)
+        print(f'ssl_verify is {ssl_verify}')
+        self.ssl_verify = ssl_verify
 
         self.extra_args = {}
 
